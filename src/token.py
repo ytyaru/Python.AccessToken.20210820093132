@@ -72,11 +72,7 @@ class Token:
 class Command:
     def __init__(self):
         self.__meta = None
-#        path = Path.here('meta.json')
-#        try: self.__meta = json.loads(path) if os.path.isfile(path) else None 
-#        except: pass
         self.__meta = FileReader.json(Path.here('meta.json'))
-#        print(os.path.isfile(path), self.__meta)
     @property
     def Version(self): return self.__meta['version'] if self.__meta else '0.0.1'
     @property
