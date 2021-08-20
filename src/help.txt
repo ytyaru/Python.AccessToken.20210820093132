@@ -1,4 +1,4 @@
-${description}	${version}
+${summary}	${version}
 ${usage}
 Parameters:
   $$1    DOMAIN   ドメイン名。

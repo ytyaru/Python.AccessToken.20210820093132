@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf8
-import os, sys, csv, json, datetime
+import os, sys, csv, json, datetime, locale
 from string import Template
 from collections import namedtuple
 def valid(*args):
@@ -73,6 +73,8 @@ class Command:
     def __init__(self):
         self.__meta = None
         self.__meta = FileReader.json(Path.here('meta.json'))
+        self.__meta['readme'] = self.__meta['ja']['readme'] if 'ja_JP' == locale.getlocale()[0] else self.__meta['en']['readme']
+        print(locale.getlocale())
     @property
     def Version(self): return self.__meta['version'] if self.__meta else '0.0.1'
     @property
@@ -80,7 +82,13 @@ class Command:
     @property
     def Details(self): return self.__meta['readme']['details'] if self.__meta else '所定のファイルにトークンを保存しておく。コマンド引数で指定されたドメインとユーザ名で絞り込む。最初に見つかったトークンを返す。見つからなかったらなにも返さない。'
     @property
-    def Description(self): return '\n'.join((self.Summary, self.Details, self.SystemArchitecture, '特徴', self.Features, '注意', self.Notes))
+    def Description(self): return '\n'.join((self.Summary, 
+                                            self.Details, 
+                                            self.SystemArchitecture, 
+                                            '特徴' if 'ja_JP' == locale.getlocale()[0] else 'Features', 
+                                            self.Features, 
+                                            '注意' if 'ja_JP' == locale.getlocale()[0] else 'Notes', 
+                                            self.Notes))
     @property
     def Usage(self): return f'{This.Names.name}{This.Names.ext} DOMAIN USER [SCOPES]...'
     @property
@@ -88,11 +96,24 @@ class Command:
         path = os.path.join(This.Names.parent, 'help.txt')
         with open(path, mode='r', encoding='utf-8') as f:
             t = Template(f.read().rstrip('\n'))
-            return t.substitute(description=self.Description, 
+            return t.substitute(summary=self.Summary, 
                                 usage=self.Usage, 
                                 this=f'{This.Names.name}{This.Names.ext}', 
                                 version=self.Version,
                                 csv=CsvTokenReader().Path)
+    @property
+    def Meta(self):
+        path = os.path.join(This.Names.parent, 'meta.txt')
+        with open(path, mode='r', encoding='utf-8') as f:
+            t = Template(f.read().rstrip('\n'))
+            return t.substitute(description=self.Description, 
+                                license_name=self.License['name'], 
+                                license_url=self.License['url'], 
+                                since=f'{self.Since:%Y-%m-%dT%H:%M:%S%z}', 
+                                copyright=self.Copyright,
+                                author_name=self.Author['name'],
+                                author_sites='\n'.join(self.Author['sites']))
+
     @property
     def Since(self):
         return datetime.datetime.fromisoformat(self.__meta['since'] if self.__meta else '2021-08-12T00:00:00+09:00')
@@ -166,6 +187,7 @@ class Cli:
             parser = SubCmdParser()
             parser.add(['-h', '--help', 'h', 'help'], App().Help)
             parser.add(['-v', '--version', 'v', 'version'], App().Version)
+            parser.add(['m', 'meta', 'metadata'], App().Meta)
             parser.add(['d', 'description'], App().Description)
             parser.add(['u', 'url'], App().Url)
             parser.add(['a', 'author'], '\n'.join([App().Author['name'], *App().Author['sites']]))
@@ -180,5 +202,7 @@ class Cli:
     def run(self): self.__parse()
 
 if __name__ == "__main__":
+    locale.setlocale(locale.LC_ALL, '')
+#    locale.setlocale(locale.LC_ALL, '')
     Cli().run()
 

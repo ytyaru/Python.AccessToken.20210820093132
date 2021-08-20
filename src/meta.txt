@@ -1,0 +1,10 @@
+${description}
+
+${license_name}
+${license_url}
+
+${since}
+${copyright}
+
+${author_name}
+${author_sites}

@@ -16,6 +16,7 @@
         "https://profile.hatena.ne.jp/ytyaru/"
     ]
 },
+"ja": {
 "readme": {
     "summary": "アクセストークンを返す。",
     "details": "所定のファイルにトークンを保存しておく。コマンド引数で指定されたドメインとユーザ名で絞り込む。最初に見つかったトークンを返す。見つからなければなにも返さない。",
@@ -27,5 +28,20 @@
         ["トークンを新しく生成しない。", "OAuthのAPIにはパスワードなどからトークンを新規生成するものがある。だが本アプリにそのような機能はない。サービス提供サイトの操作やAPIなど、何らかの方法によりアクセストークンを取得する必要がある。その後、トークンを所定のファイルパスに、所定の形式で書き込むことで機能する。"],
         ["スコープは文字列の完全一致検索である。", "ふつうスコープはread:followsのように小カテゴリを持っている。だが本アプリに少カテゴリの概念はない。もし少カテゴリがあれば、コマンド引数にread:followsを渡したとき、ファイルから大カテゴリのreadをもつトークンも対象になるはず。しかし本アプリオでは対象外。文字列が完全一致したスコープしか検索できない。"]
     ]
+}
+},
+"en": {
+"readme": {
+    "summary": "Returns an access token.",
+    "details": "Save the token in the specified file. Narrow down by the domain and user name specified in the command argument. Returns the first token found. If not found, nothing is returned.",
+    "features": [
+        ["Prevent hard coding of tokens.", "This will prevent the token from leaking in the following cases. You can look into the display from behind. Sent by keylogger. I accidentally upload the code that hard-coded the token to GitHub etc."]
+    ],
+    "notes": [
+        ["Save the token in clear text.", "If you can see the saved file, the token will be stolen. Prevent with OS login and password."],
+        ["Do not generate new tokens.", "Some OAuth APIs generate new tokens from passwords. However, this application does not have such a function. It is necessary to obtain an access token by some method such as operation of the service providing site or API. It then works by writing the token to a given file path in a given format."],
+        ["The scope is an exact match search for strings.", "Scopes usually have small categories like read: follows. However, there is no concept of small categories in this application. If you have a small category, when you pass read: follows as a command argument, tokens with a large category read from the file should also be targeted. However, this aprio does not apply. Only scopes with exact matching strings can be searched."]
+    ]
+}
 }
 }
