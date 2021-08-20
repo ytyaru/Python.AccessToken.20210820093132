@@ -74,7 +74,6 @@ class Command:
         self.__meta = None
         self.__meta = FileReader.json(Path.here('meta.json'))
         self.__meta['readme'] = self.__meta['ja']['readme'] if 'ja_JP' == locale.getlocale()[0] else self.__meta['en']['readme']
-        print(locale.getlocale())
     @property
     def Version(self): return self.__meta['version'] if self.__meta else '0.0.1'
     @property
