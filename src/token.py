@@ -106,6 +106,7 @@ class Command:
         with open(path, mode='r', encoding='utf-8') as f:
             t = Template(f.read().rstrip('\n'))
             return t.substitute(description=self.Description, 
+                                url=self.Url,
                                 license_name=self.License['name'], 
                                 license_url=self.License['url'], 
                                 since=f'{self.Since:%Y-%m-%dT%H:%M:%S%z}', 
@@ -187,7 +188,7 @@ class Cli:
             parser.add(['-h', '--help', 'h', 'help'], App().Help)
             parser.add(['-v', '--version', 'v', 'version'], App().Version)
             parser.add(['m', 'meta', 'metadata'], App().Meta)
-            parser.add(['d', 'description'], App().Description)
+            parser.add(['d', 'desc', 'description'], App().Description)
             parser.add(['u', 'url'], App().Url)
             parser.add(['a', 'author'], '\n'.join([App().Author['name'], *App().Author['sites']]))
             parser.add(['s', 'since'], App().Since.isoformat())
